@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Timer</title>
+	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<style>
+		body { font-family: 'Raleway', sans-serif; font-size:5em; }
+		#timer { text-align:center; margin-top:15%; }
+		#time-section:hover { cursor:pointer; }
+		.digit { height:5em; width:3em; }
+		.time { font-size:.25em; margin:0; padding:0; margin-left:-1em; }
+		.button-container { width:49%; padding:0; margin:0; }
+		.button-container button { margin:0; width:12em; height:4em; border-radius:.5em; background-color:#fff; font-weight:bold; cursor:pointer; outline:none; }
+		.button-container button:hover { background-color:#ff0; }
+	</style>
+</head>
+<body>
+	<main>
+		<div id="timer">
+			<div id="time-section">
+				<span class="digit" id="hour-two">0</span>
+				<span class="digit" id="hour-one">0</span>
+				<span class="time">h</span>
+				<span class="digit" id="minute-two">0</span>
+				<span class="digit" id="minute-one">0</span>
+				<span class="time">m</span>
+				<span class="digit" id="second-two">0</span>
+				<span class="digit" id="second-one">0</span>
+				<span class="time">s</span>
+			</div>
+			<div id="control-section">
+				<span class="button-container"><button id="start-stop-button">Start</button></span>
+				<span class="button-container"><button id="reset-button">Reset</button></span>
+			</div>
+		</div>
+	</main>
+	<script>
+		let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
+
+		let hourOne = document.getElementById('hour-one');
+		let hourTwo = document.getElementById('hour-two');
+		let minuteOne = document.getElementById('minute-one');
+		let minuteTwo = document.getElementById('minute-two');
+		let secondOne = document.getElementById('second-one');
+		let secondTwo = document.getElementById('second-two');
+		
+		const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
+
+		// reset everything back to zero
+		document.getElementById('reset-button').onclick = () => {
+			hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
+
+			digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
+		};
+
+		// start the clock
+		document.getElementById('start-stop-button').addEventListener('click', () => {
+			
+			timer.style.color = '#000';
+			secondOne.style.border = 'none';
+
+			countDown();
+		}, false);
+
+		document.getElementById('time-section').onclick = () => {
+			//visual effect when clicking on the timer to indicate the ability to edit
+			timer.style.color = 'grey';
+			secondOne.style.borderRight = '.02em solid grey';
+
+			document.onkeyup = (key) => {
+				
+				if (key.which == 8) {
+					if (parseInt(hourTwo.innerHTML) !== 0) {
+						hourTwo.innerHTML = 0;
+						digits.hourTwo = null;
+					}
+					else if (parseInt(hourOne.innerHTML) !== 0) {
+						hourOne.innerHTML = 0;
+						digits.hourOne = null;
+					}
+					else if (parseInt(minuteTwo.innerHTML) !== 0) {
+						minuteTwo.innerHTML = 0;
+						digits.minuteTwo = null;
+					}
+					else if (parseInt(minuteOne.innerHTML) !== 0) {
+						minuteOne.innerHTML = 0;
+						digits.minuteOne = null;
+					}
+					else if (parseInt(secondTwo.innerHTML) !== 0) {
+						secondTwo.innerHTML = 0;
+						digits.secondTwo = null;
+					}
+					else if (parseInt(secondOne.innerHTML) !== 0) {
+						secondOne.innerHTML = 0;
+						digits.secondOne = null;
+					}
+				}
+				else if (keyCodes[key.which] !== undefined) {
+
+					if (digits.secondOne == null) {
+						secondOne.innerHTML = keyCodes[key.which];
+						
+						digits.secondOne = keyCodes[key.which];
+					}
+					else if (digits.secondTwo == null) {
+						secondTwo.innerHTML = secondOne.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];
+					}
+					else if (digits.minuteOne == null) {
+						minuteOne.innerHTML = secondTwo.innerHTML;
+						secondTwo.innerHTML = secondOne.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.minuteOne = digits.secondTwo;
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];
+					}
+					else if (digits.minuteTwo == null) {
+						minuteTwo.innerHTML = minuteOne.innerHTML;
+						minuteOne.innerHTML = secondTwo.innerHTML;
+						secondTwo.innerHTML = secondOne.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.minuteTwo = digits.minuteOne;
+						digits.minuteOne = digits.secondTwo;
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];
+					}
+					else if (digits.hourOne == null) {
+						hourOne.innerHTML = minuteTwo.innerHTML;
+						minuteTwo.innerHTML = minuteOne.innerHTML;
+						minuteOne.innerHTML = secondTwo.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.hourOne = digits.minuteTwo;
+						digits.minuteTwo = digits.minuteOne;
+						digits.minuteOne = digits.secondTwo;
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];
+					}
+					else if (digits.hourTwo == null) {
+						hourTwo.innerHTML = hourOne.innerHTML;
+						hourOne.innerHTML = minuteTwo.innerHTML;
+						minuteTwo.innerHTML = minuteOne.innerHTML;
+						minuteOne.innerHTML = secondTwo.innerHTML;
+						secondTwo.innerHTML = secondOne.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.hourTwo = digits.hourOne;
+						digits.hourOne = digits.minuteTwo;
+						digits.minuteTwo = digits.minuteOne;
+						digits.minuteOne = digits.secondTwo;
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];
+					}
+					else {
+						hourTwo.innerHTML = hourOne.innerHTML;
+						hourOne.innerHTML = minuteTwo.innerHTML;
+						minuteTwo.innerHTML = minuteOne.innerHTML;
+						minuteOne.innerHTML = secondTwo.innerHTML;
+						secondTwo.innerHTML = secondOne.innerHTML;
+						secondOne.innerHTML = keyCodes[key.which];
+
+						digits.hourTwo = digits.hourOne;
+						digits.hourOne = digits.minuteTwo;
+						digits.minuteTwo = digits.minuteOne;
+						digits.minuteOne = digits.secondTwo;
+						digits.secondTwo = digits.secondOne;
+						digits.secondOne = keyCodes[key.which];						
+					}
+				}
+
+			}
+		};
+
+		// convert time into display
+		const displayTime = (amountOfTime, unitOfTime, direction=null) => {
+			
+			if (direction === '--') amountOfTime --;
+			else if (direction === '++') amountOfTime ++;
+
+			let numbers = amountOfTime.toString().split('');
+			if (numbers.length == 1) {
+				numbers[1] = numbers[0];
+				numbers[0] = 0;
+			}
+			
+			switch (unitOfTime) {
+				case 'second':
+					secondTwo.innerHTML = numbers[0];
+					secondOne.innerHTML = numbers[1];
+					break;
+				case 'minute':
+					minuteTwo.innerHTML = numbers[0];
+					minuteOne.innerHTML = numbers[1];
+					break;
+				case 'hour':
+					hourTwo.innerHTML = numbers[0];
+					hourOne.innerHTML = numbers[1];
+					break;
+				default:
+					break;
+			}
+		}
+
+		const countDown = () => {
+
+			let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
+			let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
+			let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
+
+			if (minutes > 59) {
+				minuteTwo.innerHTML = 5;
+				minutes = 59;
+			}
+			if (seconds > 59) {
+				secondTwo.innerHTML = 5;
+				seconds = 59;
+			}
+			
+			if (seconds > 0) displayTime(seconds, 'second', '--');
+			else if (minutes > 0) {
+				displayTime(minutes, 'minute', '--');
+				displayTime(59, 'second');
+			}
+			else if (hours > 0) {
+				displayTime(hours, 'hour', '--');
+				displayTime(59, 'minute');
+			}
+
+			if (seconds === 0 && minutes === 0 && hours === 0) {
+				playSound('bing');
+				return;
+			}
+			setTimeout(countDown, 1000);
+		}
+
+	</script>
+</body>
+</html>
