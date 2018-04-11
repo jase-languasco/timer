@@ -1,96 +1,109 @@
-let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
-
-let hourOne = document.getElementById('hour-one');
-let hourTwo = document.getElementById('hour-two');
-let minuteOne = document.getElementById('minute-one');
-let minuteTwo = document.getElementById('minute-two');
-let secondOne = document.getElementById('second-one');
-let secondTwo = document.getElementById('second-two');
 
 let clockRunning = false;
 let audio = new Audio('times-up.mp3');
 
-const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
+/**************
+* Initialize 
+**************/
 
-// inintialize the timer
+let timer = document.getElementById('timer');
 
-let timers = document.getElementsByClassName('timer');
+let timeSection = document.createElement('div');
+timeSection.id = 'time-section';
 
-for (let i = 0; i < timers.length; i ++) { 
-	timers[i].innerHTML =
-	`<div id="timer">
-		<div id="time-section">
-			<span class="digit" id="hour-two">0</span>
-			<span class="digit" id="hour-one">0</span>
-			<span class="time">h</span>
-			<span class="digit" id="minute-two">0</span>
-			<span class="digit" id="minute-one">0</span>
-			<span class="time">m</span>
-			<span class="digit" id="second-two">0</span>
-			<span class="digit" id="second-one">0</span>
-			<span class="time">s</span>
-		</div>
-		<div id="control-section">
-			<span class="button-container"><button id="start-stop-button">Start</button></span>
-			<span class="button-container"><button id="reset-button">Reset</button></span>
-		</div>
-	</div>`;
-}
+let hourTwo = document.createElement('span');
+hourTwo.id = 'hour-two';
+hourTwo.className = 'digit';
+hourTwo.innerHTML = 0;
+timeSection.appendChild(hourTwo);
+
+let hourOne = document.createElement('span');
+hourOne.id = 'hour-one';
+hourOne.className = 'digit';
+hourOne.innerHTML = 0;
+timeSection.appendChild(hourOne);
+
+let h = document.createElement('span');
+h.className = 'time';
+h.innerHTML = 'h';
+timeSection.appendChild(h);
+
+let minuteTwo = document.createElement('span');
+minuteTwo.id = 'minute-two';
+minuteTwo.className = 'digit';
+minuteTwo.innerHTML = 0;
+timeSection.appendChild(minuteTwo);
+
+let minuteOne = document.createElement('span');
+minuteOne.id = 'minute-one';
+minuteOne.className = 'digit';
+minuteOne.innerHTML = 0;
+timeSection.appendChild(minuteOne);
+
+let m = document.createElement('span');
+m.className = 'time';
+m.innerHTML = 'm';
+timeSection.appendChild(m);
+
+let secondTwo = document.createElement('span');
+secondTwo.id = 'second-two';
+secondTwo.className = 'digit';
+secondTwo.innerHTML = 0;
+timeSection.appendChild(secondTwo);
+
+let secondOne = document.createElement('span');
+secondOne.id = 'second-one';
+secondOne.className = 'digit';
+secondOne.innerHTML = 0;
+timeSection.appendChild(secondOne);
+
+let s = document.createElement('span');
+s.className = 'time';
+s.innerHTML = 's';
+timeSection.appendChild(s);
+
+let timerControls = document.createElement('div');
+timerControls.id = 'control-section';
+
+let startButtonContainer = document.createElement('span');
+startButtonContainer.className = 'button-container';
+
+let startButton = document.createElement('button');
+startButton.id = 'start-button';
+startButton.className = 'button';
+startButton.innerHTML = 'Start';
+
+startButtonContainer.appendChild(startButton);
+
+let resetButtonContainer = document.createElement('span');
+resetButtonContainer.className = 'button-container';
+
+let resetButton = document.createElement('button');
+resetButton.id = 'reset-button';
+resetButton.className = 'button';
+resetButton.innerHTML = 'Reset';
+
+resetButtonContainer.appendChild(resetButton);
+
+timerControls.appendChild(startButtonContainer);
+timerControls.appendChild(resetButtonContainer);
+
+timer.appendChild(timeSection);
+timer.appendChild(timerControls);
+
+let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
 
 
-// reset everything back to zero
-document.getElementById('reset-button').onclick = () => {
-	clockRunning = false;
-	audio.pause();
-	hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
-	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
-};
-
-// start the clock
-document.getElementById('start-stop-button').onclick = () => {
-
-	let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
-	let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
-	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
+/************
+* Functions
+************/
 	
-	if (!clockRunning) {
-		timer.style.color = '#000';
-		secondOne.style.border = 'none';
-
-		if (hours === 99 && minutes === 99 && seconds === 99) {
-			// if the clock is maxed out we'll leave hours alone and set minutes and seconds to the appropriate time
-			displayTime(59, 'second');
-			displayTime(59, 'minute');
-		}
-		else {
-			if (seconds > 59) {
-				let amountOfTime = seconds;
-				let extraMinutes = Math.floor(amountOfTime/59);
-				seconds = amountOfTime - (extraMinutes * 59);
-				displayTime(seconds, 'second');
-				displayTime(extraMinutes, 'minute');
-			}
-
-			if (minutes > 59) {
-				let amountOfTime = minutes;
-				let extraHours = Math.floor(amountOfTime/59);
-				minutes = amountOfTime - (extraHours * 59);
-				hours += extraHours;
-				if (hours > 99) hours = 99;
-				displayTime(hours, 'hour');
-			}
-		}
-
-		countDown();
-		clockRunning = true;
-	}
-}
-
-// initilize the clock and add keyup event
-document.getElementById('time-section').onclick = () => {
-	//visual effect when clicking on the timer to indicate the ability to edit
+// initialize timer to type in digits
+const initTimer = () => {
 	timer.style.color = 'grey';
 	secondOne.style.borderRight = '.02em solid grey';
+	
+	const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
 
 	document.onkeyup = (key) => {
 		if (key.which == 8) {
@@ -197,7 +210,56 @@ document.getElementById('time-section').onclick = () => {
 			}
 		}
 	}
-};
+}
+
+// reset everything back to zero
+const resetTimer = () => {
+	timer.style.color = '#000000';
+	secondOne.style.border = 'none';
+	clockRunning = false;
+	audio.pause();
+	hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
+	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
+}
+
+// start timer
+const startTimer = () => {
+	let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
+	let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
+	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
+	
+	if (!clockRunning) {
+		timer.style.color = '#000';
+		secondOne.style.border = 'none';
+
+		if (hours === 99 && minutes === 99 && seconds === 99) {
+			// if the clock is maxed out we'll leave hours alone and set minutes and seconds to the appropriate time
+			displayTime(59, 'second');
+			displayTime(59, 'minute');
+		}
+		else {
+			if (seconds > 59) {
+				let amountOfTime = seconds;
+				let extraMinutes = Math.floor(amountOfTime/59);
+				seconds = amountOfTime - (extraMinutes * 59);
+				displayTime(seconds, 'second');
+				displayTime(extraMinutes, 'minute');
+			}
+
+			if (minutes > 59) {
+				let amountOfTime = minutes;
+				let extraHours = Math.floor(amountOfTime/59);
+				minutes = amountOfTime - (extraHours * 59);
+				hours += extraHours;
+				if (hours > 99) hours = 99;
+				displayTime(hours, 'hour');
+			}
+		}
+
+		countDown();
+		clockRunning = true;
+	}
+}
 
 // convert time into display
 const displayTime = (amountOfTime, unitOfTime, direction=null) => {
@@ -254,3 +316,13 @@ const countDown = () => {
 
 	setTimeout(countDown, 1000);
 }
+
+// reset everything back to zero
+resetButton.onclick = resetTimer;
+
+// start the clock
+startButton.onclick = startTimer;
+
+// initilize the clock and add keyup event
+timeSection.onclick = initTimer;
+
