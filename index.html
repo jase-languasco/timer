@@ -10,8 +10,8 @@
 		.digit { height:5em; width:3em; }
 		.time { font-size:.25em; margin:0; padding:0; margin-left:-1em; }
 		.button-container { width:49%; padding:0; margin:0; }
-		.button-container button { margin:0; width:12em; height:4em; border-radius:.5em; background-color:#fff; font-weight:bold; cursor:pointer; outline:none; }
-		.button-container button:hover { background-color:#ff0; }
+		.button-container button { margin:0; width:12em; height:4em; border-radius:.3em; background-color:#e0e1e2; font-weight:bold; cursor:pointer; outline:none; }
+		.button-container button:hover { background-color:#c6c6c6; }
 	</style>
 </head>
 <body>
@@ -35,6 +35,12 @@
 		</div>
 	</main>
 	<script>
+		/*****
+		to-do
+		1. miliseconds
+		2. if too much time is added to seconds push it to minutes, and minutes to hours
+		3. prevent start button from starting more than once
+		*****/
 		let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
 
 		let hourOne = document.getElementById('hour-one');
@@ -43,24 +49,59 @@
 		let minuteTwo = document.getElementById('minute-two');
 		let secondOne = document.getElementById('second-one');
 		let secondTwo = document.getElementById('second-two');
+
+		let clockRunning = false;
+		let audio = new Audio('times-up.mp3');
 		
 		const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
 
 		// reset everything back to zero
 		document.getElementById('reset-button').onclick = () => {
+			clockRunning = false;
+			audio.pause();
 			hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
-
 			digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
 		};
 
 		// start the clock
-		document.getElementById('start-stop-button').addEventListener('click', () => {
-			
-			timer.style.color = '#000';
-			secondOne.style.border = 'none';
+		document.getElementById('start-stop-button').onclick = () => {
 
-			countDown();
-		}, false);
+			let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
+			let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
+			let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
+			
+			if (!clockRunning) {
+				timer.style.color = '#000';
+				secondOne.style.border = 'none';
+
+				if (hours === 99 && minutes === 99 && seconds === 99) {
+					// if the clock is maxed out we'll leave hours alone and set minutes and seconds to the appropriate time
+					displayTime(59, 'second');
+					displayTime(59, 'minute');
+				}
+				else {
+					if (seconds > 59) {
+						let amountOfTime = seconds;
+						let extraMinutes = Math.floor(amountOfTime/59);
+						seconds = amountOfTime - (extraMinutes * 59);
+						displayTime(seconds, 'second');
+						displayTime(extraMinutes, 'minute');
+					}
+
+					if (minutes > 59) {
+						let amountOfTime = minutes;
+						let extraHours = Math.floor(amountOfTime/59);
+						minutes = amountOfTime - (extraHours * 59);
+						hours += extraHours;
+						if (hours > 99) hours = 99;
+						displayTime(hours, 'hour');
+					}
+				}
+
+				countDown();
+				clockRunning = true;
+			}
+		}
 
 		document.getElementById('time-section').onclick = () => {
 			//visual effect when clicking on the timer to indicate the ability to edit
@@ -68,7 +109,6 @@
 			secondOne.style.borderRight = '.02em solid grey';
 
 			document.onkeyup = (key) => {
-				
 				if (key.which == 8) {
 					if (parseInt(hourTwo.innerHTML) !== 0) {
 						hourTwo.innerHTML = 0;
@@ -172,7 +212,6 @@
 						digits.secondOne = keyCodes[key.which];						
 					}
 				}
-
 			}
 		};
 
@@ -183,11 +222,12 @@
 			else if (direction === '++') amountOfTime ++;
 
 			let numbers = amountOfTime.toString().split('');
+			
 			if (numbers.length == 1) {
 				numbers[1] = numbers[0];
 				numbers[0] = 0;
 			}
-			
+
 			switch (unitOfTime) {
 				case 'second':
 					secondTwo.innerHTML = numbers[0];
@@ -204,6 +244,7 @@
 				default:
 					break;
 			}
+			return;
 		}
 
 		const countDown = () => {
@@ -211,16 +252,12 @@
 			let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
 			let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
 			let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
-
-			if (minutes > 59) {
-				minuteTwo.innerHTML = 5;
-				minutes = 59;
-			}
-			if (seconds > 59) {
-				secondTwo.innerHTML = 5;
-				seconds = 59;
-			}
 			
+			if (seconds === 0 && minutes === 0 && hours === 0) {
+				audio.play();
+				return;
+			}
+
 			if (seconds > 0) displayTime(seconds, 'second', '--');
 			else if (minutes > 0) {
 				displayTime(minutes, 'minute', '--');
@@ -231,12 +268,10 @@
 				displayTime(59, 'minute');
 			}
 
-			if (seconds === 0 && minutes === 0 && hours === 0) {
-				playSound('bing');
-				return;
-			}
 			setTimeout(countDown, 1000);
 		}
+
+
 
 	</script>
 </body>
