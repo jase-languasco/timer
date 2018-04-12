@@ -85,12 +85,12 @@ timerControls.id = 'control-section';
 
 let startButton = document.createElement('button');
 startButton.id = 'start-button';
-startButton.className = 'button';
+startButton.className = 'button control-button';
 startButton.innerHTML = 'Start';
 
 let resetButton = document.createElement('button');
 resetButton.id = 'reset-button';
-resetButton.className = 'button';
+resetButton.className = 'button control-button';
 resetButton.innerHTML = 'Reset';
 
 timerControls.appendChild(startButton);
@@ -255,19 +255,19 @@ const startTimer = () => {
 		}
 		else {
 			if (seconds > 59) {
-				let amountOfTime = seconds;
-				let extraMinutes = Math.floor(amountOfTime/59);
-				seconds = amountOfTime - (extraMinutes * 59);
+				let extraMinutes = Math.floor(seconds/59);
+				seconds -= (extraMinutes * 59);
+				minutes += extraMinutes;
 				displayTime(seconds, 'second');
-				displayTime(extraMinutes, 'minute');
+				displayTime(minutes, 'minute');
 			}
 
 			if (minutes > 59) {
-				let amountOfTime = minutes;
-				let extraHours = Math.floor(amountOfTime/59);
-				minutes = amountOfTime - (extraHours * 59);
+				let extraHours = Math.floor(minutes/59);
+				minutes -= (extraHours * 59);
 				hours += extraHours;
 				if (hours > 99) hours = 99;
+				displayTime(minutes, 'minute');
 				displayTime(hours, 'hour');
 			}
 		}

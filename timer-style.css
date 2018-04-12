@@ -1,22 +1,33 @@
-#timer { text-align:center; width:100%; height:100%; font-size:12em; display:flex; align-items:center; justify-content:center; }
+body { margin:0; padding:0; }
+#timer { text-align:center; width:100%; height:100%; font-size:62.5%; display:flex; align-items:center; justify-content:center; margin:0; padding:0; }
 
 #timer-container { }
-#timer-section { display:block; }
+#time-section { display:block; font-size:20em; }
 #time-section:hover { cursor:pointer; }
 #control-section { padding:0; margin:0; display:block; }
 .digit { height:5em; width:3em; }
 .time { font-size:.25em; margin:0; padding:0; }
 
-.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; font-weight:bold; cursor:pointer; outline:none; margin:0 1em; display:inline-block; vertical-align:top; }
+.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; cursor:pointer; outline:none; margin:10px; display:inline-block; vertical-align:top; font-size:1.25em; }
 .button:hover { background-color:#c6c6c6; }
+.control-button { padding:0; margin:0 10px 0 0; }
 .quick-set {  width:10em; height:5em; vertical-align:bottom; }
 
 @media (max-width:850px) {
-	#timer { font-size:10em; }
+	#time-section { font-size:15em; }
 }
 @media (max-width:577px) {
-	#timer { font-size:8em; }
+	#time-section { font-size:12em; }
+
 }
 @media (max-width:480px) {
-	#timer { font-size:6em; }
+	#time-section { font-size:10em; }
+	.control-button { width:100%; margin:0 0 10px 0;}
+}
+@media (max-width:380px) {
+	#time-section { font-size:8em; }
+}
+@media (max-width:315px) {
+	#time-section { font-size:6em; }
+	.quick-set { width:100%; margin:0 0 10px 0; }
 }
