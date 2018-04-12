@@ -82,7 +82,7 @@ timeSection.appendChild(s);
 
 let input = document.createElement('input');
 input.className = 'hiddenInput';
-input.type = 'hidden';
+//input.type = 'hidden';
 timeSection.appendChild(input);
 
 let timerControls = document.createElement('div');
