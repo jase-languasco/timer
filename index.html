@@ -3,23 +3,13 @@
 <head>
 	<title>Timer</title>
 	<link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+	<link href="timer-style.css" rel="stylesheet">
 	<style>
-		body { font-family: 'Raleway', sans-serif; font-size:5em; }
-		body, main { width:100%; height:100%; }
-		#timer { text-align:center; margin-top:20%; }
-
-		#time-section:hover { cursor:pointer; }
-		.digit { height:5em; width:3em; }
-		.time { font-size:.25em; margin:0; padding:0; }
-		.button-container { width:49%; padding:0; margin:0; }
-		.button { margin:0; width:12em; height:4em; border-radius:.3em; background-color:#e0e1e2; font-weight:bold; cursor:pointer; outline:none; margin:1em; }
-		.button:hover { background-color:#c6c6c6; }
+		html, body { height:100%; width:100%; overflow:hidden; }
 	</style>
 </head>
 <body>
-	<main>
-		<div id="timer"></div>
-	</main>
-	<script src="script.js?v=1.2"></script>
+	<div id="timer"></div>
+	<script src="timer-script.js?v=1.0"></script>
 </body>
 </html>

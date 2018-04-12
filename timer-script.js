@@ -4,6 +4,27 @@
 
 let timer = document.getElementById('timer');
 
+let timerContainer = document.createElement('div');
+timerContainer.id = 'timer-container';
+
+let upperControls = document.createElement('div');
+upperControls.className = 'upper-controls';
+
+let twentyMin = document.createElement('button');
+twentyMin.className = 'twenty-minute quick-set button';
+twentyMin.innerHTML = '20 min';
+//twentyMin.innerHTML = '<image src="http://www.pngmart.com/files/1/Tomato-Clip-Art-Cartoon-PNG.png" height="20px"; width="20px">'
+twentyMin.dataset.time = '20m';
+
+let fiveMin = document.createElement('button');
+fiveMin.className = 'five-minute quick-set button';
+fiveMin.innerHTML = '5 min';
+fiveMin.dataset.time = '05m';
+
+upperControls.appendChild(twentyMin);
+upperControls.appendChild(fiveMin);
+timerContainer.appendChild(upperControls);
+
 let timeSection = document.createElement('div');
 timeSection.id = 'time-section';
 
@@ -62,34 +83,26 @@ timeSection.appendChild(s);
 let timerControls = document.createElement('div');
 timerControls.id = 'control-section';
 
-let startButtonContainer = document.createElement('span');
-startButtonContainer.className = 'button-container';
-
 let startButton = document.createElement('button');
 startButton.id = 'start-button';
 startButton.className = 'button';
 startButton.innerHTML = 'Start';
-
-startButtonContainer.appendChild(startButton);
-
-let resetButtonContainer = document.createElement('span');
-resetButtonContainer.className = 'button-container';
 
 let resetButton = document.createElement('button');
 resetButton.id = 'reset-button';
 resetButton.className = 'button';
 resetButton.innerHTML = 'Reset';
 
-resetButtonContainer.appendChild(resetButton);
+timerControls.appendChild(startButton);
+timerControls.appendChild(resetButton);
 
-timerControls.appendChild(startButtonContainer);
-timerControls.appendChild(resetButtonContainer);
+timerContainer.appendChild(timeSection);
+timerContainer.appendChild(timerControls);
 
-timer.appendChild(timeSection);
-timer.appendChild(timerControls);
+timer.appendChild(timerContainer);
 
 /***********
-* Setup Program
+* Setup App
 ***********/
 
 let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
@@ -105,6 +118,7 @@ let audio = new Audio('times-up.mp3');
 // initialize timer to type in digits
 const initTimer = () => {
 	
+	if (clockRunning) return;
 	startBlinkingCursor();
 	
 	const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
@@ -218,9 +232,7 @@ const initTimer = () => {
 
 // reset everything back to zero
 const resetTimer = () => {
-	endBlinkingCursor();
-	clockRunning = false;
-	clearTimeout(countDownId);
+	endTimer();
 	hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
 	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = null;
 }
@@ -233,6 +245,7 @@ const startTimer = () => {
 	
 	// shouldn't be able to click start if everything is set to zero or if the clock has already been started
 	if (!clockRunning && (seconds > 0 || minutes > 0 || hours > 0)) {
+		endBlinkingCursor();
 		clockRunning = true;
 
 		if (hours === 99 && minutes === 99 && seconds === 99) {
@@ -315,14 +328,22 @@ const countDown = () => {
 
 	if (seconds === 0 && minutes === 0 && hours === 0) {
 		audio.play();
+		endTimer();
 		return;
 	}
 
 	countDownId = setTimeout(countDown, 1000);
 }
 
+const endTimer = () => {
+	clockRunning = false;
+	endBlinkingCursor();
+	clearTimeout(countDownId);
+}
+
 const startBlinkingCursor = () => {
 	if (!cursorId) {
+		timeSection.style.color = 'grey';
 		cursorId = setInterval(function () {
 			if (secondOne.style.borderRight === '0.02em solid white') secondOne.style.borderRight = '.02em solid grey';
 			else secondOne.style.borderRight = '.02em solid white';
@@ -334,7 +355,34 @@ const startBlinkingCursor = () => {
 const endBlinkingCursor = () => {
 	clearInterval(cursorId);
 	secondOne.style.borderRight = '.02em solid white';
+	timeSection.style.color = 'black';
 	cursorId = undefined;
+}
+
+/********
+* Execute
+*********/
+
+// quick set button
+let quickSetButtons = document.getElementsByClassName('quick-set');
+
+for (let i = 0; i < quickSetButtons.length; i++) {
+	quickSetButtons[i].onclick = () => {
+		let quickTime = quickSetButtons[i].dataset.time.split('');
+		switch (quickTime[2]) {
+			case 's':
+				displayTime(parseInt(quickTime[0]+quickTime[1]), 'second');
+				break;
+			case 'm':
+				displayTime(parseInt(quickTime[0]+quickTime[1]), 'minute');
+				break;
+			case 'h':
+				displayTime(parseInt(quickTime[0]+quickTime[1]), 'hour');
+				break;
+			default:
+				break;
+		}
+	};
 }
 
 // reset everything back to zero
