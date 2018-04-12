@@ -123,7 +123,7 @@ let audio = new Audio('times-up.mp3');
 // initialize timer to type in digits
 const initTimer = () => {
 	
-	input.dispatchEvent(new KeyboardEvent('keypress',{'key':'a'}));
+	input.focus();
 
 	if (clockRunning) return;
 	startBlinkingCursor();
@@ -375,19 +375,21 @@ let quickSetButtons = document.getElementsByClassName('quick-set');
 
 for (let i = 0; i < quickSetButtons.length; i++) {
 	quickSetButtons[i].onclick = () => {
-		let quickTime = quickSetButtons[i].dataset.time.split('');
-		switch (quickTime[2]) {
-			case 's':
-				displayTime(parseInt(quickTime[0]+quickTime[1]), 'second');
-				break;
-			case 'm':
-				displayTime(parseInt(quickTime[0]+quickTime[1]), 'minute');
-				break;
-			case 'h':
-				displayTime(parseInt(quickTime[0]+quickTime[1]), 'hour');
-				break;
-			default:
-				break;
+		if (!clockRunning) {
+			let quickTime = quickSetButtons[i].dataset.time.split('');
+			switch (quickTime[2]) {
+				case 's':
+					displayTime(parseInt(quickTime[0]+quickTime[1]), 'second');
+					break;
+				case 'm':
+					displayTime(parseInt(quickTime[0]+quickTime[1]), 'minute');
+					break;
+				case 'h':
+					displayTime(parseInt(quickTime[0]+quickTime[1]), 'hour');
+					break;
+				default:
+					break;
+			}
 		}
 	};
 }
