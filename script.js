@@ -1,9 +1,5 @@
-
-let clockRunning = false;
-let audio = new Audio('times-up.mp3');
-
 /**************
-* Initialize 
+* Initialize HTML
 **************/
 
 let timer = document.getElementById('timer');
@@ -54,6 +50,7 @@ timeSection.appendChild(secondTwo);
 let secondOne = document.createElement('span');
 secondOne.id = 'second-one';
 secondOne.className = 'digit';
+secondOne.style.borderRight = '.02em solid white'
 secondOne.innerHTML = 0;
 timeSection.appendChild(secondOne);
 
@@ -91,8 +88,14 @@ timerControls.appendChild(resetButtonContainer);
 timer.appendChild(timeSection);
 timer.appendChild(timerControls);
 
-let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
+/***********
+* Setup Program
+***********/
 
+let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
+let cursorId;
+let clockRunning = false;
+let audio = new Audio('times-up.mp3');
 
 /************
 * Functions
@@ -100,8 +103,8 @@ let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTw
 	
 // initialize timer to type in digits
 const initTimer = () => {
-	timer.style.color = 'grey';
-	secondOne.style.borderRight = '.02em solid grey';
+	
+	startBlinkingCursor();
 	
 	const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
 
@@ -214,10 +217,9 @@ const initTimer = () => {
 
 // reset everything back to zero
 const resetTimer = () => {
-	timer.style.color = '#000000';
-	secondOne.style.border = 'none';
+	endBlinkingCursor(cursorId);
 	clockRunning = false;
-	audio.pause();
+	//audio.pause();
 	hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
 	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
 }
@@ -229,6 +231,7 @@ const startTimer = () => {
 	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
 	
 	if (!clockRunning) {
+		clockRunning = true;
 		timer.style.color = '#000';
 		secondOne.style.border = 'none';
 
@@ -257,13 +260,11 @@ const startTimer = () => {
 		}
 
 		countDown();
-		clockRunning = true;
 	}
 }
 
 // convert time into display
-const displayTime = (amountOfTime, unitOfTime, direction=null) => {
-	
+const displayTime = (amountOfTime, unitOfTime, direction=null) => {	
 	if (direction === '--') amountOfTime --;
 	else if (direction === '++') amountOfTime ++;
 
@@ -294,7 +295,6 @@ const displayTime = (amountOfTime, unitOfTime, direction=null) => {
 }
 
 const countDown = () => {
-
 	let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
 	let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
 	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
@@ -315,6 +315,20 @@ const countDown = () => {
 	}
 
 	setTimeout(countDown, 1000);
+}
+
+const startBlinkingCursor = () => {
+	if (!cursorId) {
+		cursorId = setInterval(function () {
+			if (secondOne.style.borderRight === '0.02em solid white') secondOne.style.borderRight = '.02em solid grey';
+			else secondOne.style.borderRight = '.02em solid white';
+
+		}, 250);
+	}
+}
+
+const endBlinkingCursor = (id) => {
+	clearInterval(id);
 }
 
 // reset everything back to zero
