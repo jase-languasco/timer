@@ -4,11 +4,11 @@ body { margin:0; padding:0; }
 #timer-container { }
 #time-section { display:block; font-size:20em; }
 #time-section:hover { cursor:pointer; }
-#control-section { padding:0; margin:0; display:block; }
+#control-section { padding:0; margin:5px 0; display:block; }
 .digit { height:5em; width:3em; }
 .time { font-size:.25em; margin:0; padding:0; }
 
-.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; cursor:pointer; outline:none; margin:10px; display:inline-block; vertical-align:top; font-size:1.25em; }
+.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; cursor:pointer; outline:none; margin:10px; display:inline-block; vertical-align:top; font-size:1.25em; border:none; border-style:unset; }
 .button:hover { background-color:#c6c6c6; }
 .control-button { padding:0; margin:0 10px 0 0; }
 .quick-set {  width:10em; height:5em; vertical-align:bottom; }

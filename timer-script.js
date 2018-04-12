@@ -80,6 +80,11 @@ s.className = 'time';
 s.innerHTML = 's';
 timeSection.appendChild(s);
 
+let input = document.createElement('input');
+input.className = 'hiddenInput';
+input.type = 'hidden';
+timeSection.appendChild(input);
+
 let timerControls = document.createElement('div');
 timerControls.id = 'control-section';
 
@@ -118,6 +123,8 @@ let audio = new Audio('times-up.mp3');
 // initialize timer to type in digits
 const initTimer = () => {
 	
+	input.dispatchEvent(new KeyboardEvent('keypress',{'key':'a'}));
+
 	if (clockRunning) return;
 	startBlinkingCursor();
 	
