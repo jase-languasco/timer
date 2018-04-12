@@ -94,6 +94,7 @@ timer.appendChild(timerControls);
 
 let digits = {'secondOne': null, 'secondTwo': null, 'minuteOne': null, 'minuteTwo': null, 'hourOne': null, 'hourTwo': null};
 let cursorId;
+let countDownId;
 let clockRunning = false;
 let audio = new Audio('times-up.mp3');
 
@@ -217,11 +218,11 @@ const initTimer = () => {
 
 // reset everything back to zero
 const resetTimer = () => {
-	endBlinkingCursor(cursorId);
+	endBlinkingCursor();
 	clockRunning = false;
-	//audio.pause();
+	clearTimeout(countDownId);
 	hourOne.innerHTML = hourTwo.innerHTML = minuteOne.innerHTML = minuteTwo.innerHTML = secondOne.innerHTML = secondTwo.innerHTML = 0;
-	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = 0;
+	digits.secondOne = digits.secondTwo = digits.minuteOne = digits.minuteTwo = digits.hourOne = digits.hourTwo = null;
 }
 
 // start timer
@@ -230,10 +231,9 @@ const startTimer = () => {
 	let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
 	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
 	
-	if (!clockRunning) {
+	// shouldn't be able to click start if everything is set to zero or if the clock has already been started
+	if (!clockRunning && (seconds > 0 || minutes > 0 || hours > 0)) {
 		clockRunning = true;
-		timer.style.color = '#000';
-		secondOne.style.border = 'none';
 
 		if (hours === 99 && minutes === 99 && seconds === 99) {
 			// if the clock is maxed out we'll leave hours alone and set minutes and seconds to the appropriate time
@@ -318,7 +318,7 @@ const countDown = () => {
 		return;
 	}
 
-	setTimeout(countDown, 1000);
+	countDownId = setTimeout(countDown, 1000);
 }
 
 const startBlinkingCursor = () => {
@@ -331,8 +331,10 @@ const startBlinkingCursor = () => {
 	}
 }
 
-const endBlinkingCursor = (id) => {
-	clearInterval(id);
+const endBlinkingCursor = () => {
+	clearInterval(cursorId);
+	secondOne.style.borderRight = '.02em solid white';
+	cursorId = undefined;
 }
 
 // reset everything back to zero
