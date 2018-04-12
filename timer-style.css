@@ -7,9 +7,9 @@
 .digit { height:5em; width:3em; }
 .time { font-size:.25em; margin:0; padding:0; }
 
-.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; font-weight:bold; cursor:pointer; outline:none; margin:0 1em; display:inline-block; }
+.button { width:18em; height:6em; border-radius:.3em; background-color:#e0e1e2; font-weight:bold; cursor:pointer; outline:none; margin:0 1em; display:inline-block; vertical-align:top; }
 .button:hover { background-color:#c6c6c6; }
-.quick-set {  width:10em; height:5em; }
+.quick-set {  width:10em; height:5em; vertical-align:bottom; }
 
 @media (max-width:850px) {
 	#timer { font-size:10em; }
