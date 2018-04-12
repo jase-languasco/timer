@@ -298,11 +298,6 @@ const countDown = () => {
 	let seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
 	let minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
 	let hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
-	
-	if (seconds === 0 && minutes === 0 && hours === 0) {
-		audio.play();
-		return;
-	}
 
 	if (seconds > 0) displayTime(seconds, 'second', '--');
 	else if (minutes > 0) {
@@ -312,6 +307,15 @@ const countDown = () => {
 	else if (hours > 0) {
 		displayTime(hours, 'hour', '--');
 		displayTime(59, 'minute');
+	}
+
+	seconds = parseInt(secondTwo.innerHTML + secondOne.innerHTML);
+	minutes = parseInt(minuteTwo.innerHTML + minuteOne.innerHTML);
+	hours = parseInt(hourTwo.innerHTML + hourOne.innerHTML);
+
+	if (seconds === 0 && minutes === 0 && hours === 0) {
+		audio.play();
+		return;
 	}
 
 	setTimeout(countDown, 1000);
