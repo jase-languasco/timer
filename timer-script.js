@@ -400,7 +400,3 @@ startButton.onclick = startTimer;
 // initilize the clock and add keyup event
 timeSection.onclick = initTimer;
 
-timeSection.onclick = () => {
-	secondOne.focus();
-}
-
