@@ -125,7 +125,6 @@ let audio = new Audio('times-up.mp3');
 const initTimer = () => {
 	if (clockRunning) return;
 	startBlinkingCursor();
-	secondOne.trigger('focus');
 	const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
 
 	document.onkeyup = (key) => {
@@ -400,4 +399,8 @@ startButton.onclick = startTimer;
 
 // initilize the clock and add keyup event
 timeSection.onclick = initTimer;
+
+timeSection.onclick = () => {
+	secondOne.focus();
+}
 
