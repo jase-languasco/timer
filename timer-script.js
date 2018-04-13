@@ -86,7 +86,7 @@ input.type = 'hidden';
 input.style.visibility = 'hidden';
 input.style.zIndex = '-9999';
 input.style.position = 'absolute';
-input.id = 'hiddenInput';
+input.style.fontSize = '16px';
 timeSection.appendChild(input);
 
 let s = document.createElement('span');
