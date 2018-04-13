@@ -82,7 +82,7 @@ secondOne.innerHTML = 0;
 timeSection.appendChild(secondOne);
 
 let input = document.createElement('input');
-input.type = 'text';
+input.type = 'hidden';
 input.style.visibility = 'hidden';
 input.style.zIndex = '-9999';
 input.style.position = 'absolute';
