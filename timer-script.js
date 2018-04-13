@@ -81,6 +81,14 @@ secondOne.style.borderRight = '.02em solid white'
 secondOne.innerHTML = 0;
 timeSection.appendChild(secondOne);
 
+let input = document.createElement('input');
+input.type = 'text';
+input.style.visibility = 'hidden';
+input.style.zIndex = '-9999';
+input.style.position = 'absolute';
+input.id = 'hiddenInput';
+timeSection.appendChild(input);
+
 let s = document.createElement('span');
 s.className = 'time';
 s.innerHTML = 's';
@@ -125,6 +133,11 @@ let audio = new Audio('times-up.mp3');
 const initTimer = () => {
 	if (clockRunning) return;
 	startBlinkingCursor();
+
+	input.style.visibility = 'visible';
+	input.focus();
+	input.style.visibility = 'hidden';
+
 	const keyCodes = { 48: 0, 49: 1, 50: 2, 51: 3, 52: 4, 53: 5, 54: 6, 55: 7, 56: 8, 57: 9 };
 
 	document.onkeyup = (key) => {
