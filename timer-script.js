@@ -31,14 +31,14 @@ timeSection.id = 'time-section';
 let hourTwo = document.createElement('span');
 hourTwo.id = 'hour-two';
 hourTwo.className = 'digit';
-hourTwo.tabIndex = '0';
+hourTwo.tabIndex = 0;
 hourTwo.innerHTML = 0;
 timeSection.appendChild(hourTwo);
 
 let hourOne = document.createElement('span');
 hourOne.id = 'hour-one';
 hourOne.className = 'digit';
-hourOne.tabIndex = '0';
+hourOne.tabIndex = 0;
 hourOne.innerHTML = 0;
 timeSection.appendChild(hourOne);
 
@@ -50,14 +50,14 @@ timeSection.appendChild(h);
 let minuteTwo = document.createElement('span');
 minuteTwo.id = 'minute-two';
 minuteTwo.className = 'digit';
-minuteTwo.tabIndex = '0';
+minuteTwo.tabIndex = 0;
 minuteTwo.innerHTML = 0;
 timeSection.appendChild(minuteTwo);
 
 let minuteOne = document.createElement('span');
 minuteOne.id = 'minute-one';
 minuteOne.className = 'digit';
-minuteOne.tabIndex = '0';
+minuteOne.tabIndex = 0;
 minuteOne.innerHTML = 0;
 timeSection.appendChild(minuteOne);
 
@@ -69,14 +69,14 @@ timeSection.appendChild(m);
 let secondTwo = document.createElement('span');
 secondTwo.id = 'second-two';
 secondTwo.className = 'digit';
-secondTwo.tabIndex = '0';
+secondTwo.tabIndex = 0;
 secondTwo.innerHTML = 0;
 timeSection.appendChild(secondTwo);
 
 let secondOne = document.createElement('span');
 secondOne.id = 'second-one';
 secondOne.className = 'digit';
-secondOne.tabIndex = '0';
+secondOne.tabIndex = 0;
 secondOne.style.borderRight = '.02em solid white'
 secondOne.innerHTML = 0;
 timeSection.appendChild(secondOne);
