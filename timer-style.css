@@ -17,7 +17,6 @@ body { margin:0; padding:0; }
 }
 @media (max-width:577px) {
 	#time-section { font-size:12em; }
-
 }
 @media (max-width:480px) {
 	#time-section { font-size:10em; }
@@ -27,6 +26,21 @@ body { margin:0; padding:0; }
 	#time-section { font-size:8em; }
 }
 @media (max-width:315px) {
+	#time-section { font-size:6em; }
+	.quick-set { width:100%; margin:0 0 10px 0; }
+}
+
+@media only screen and (max-device-width: 577px) {      
+	#time-section { font-size:12em; }
+}
+@media only screen and (max-device-width:480px) {
+	#time-section { font-size:10em; }
+	.control-button { width:100%; margin:0 0 10px 0;}
+}
+@media only screen and (max-device-width:380px) {
+	#time-section { font-size:8em; }
+}
+@media only screen and (max-device-width:315px) {
 	#time-section { font-size:6em; }
 	.quick-set { width:100%; margin:0 0 10px 0; }
 }
