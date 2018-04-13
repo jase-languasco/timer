@@ -76,7 +76,7 @@ timeSection.appendChild(secondTwo);
 let secondOne = document.createElement('span');
 secondOne.id = 'second-one';
 secondOne.className = 'digit';
-secondOne.tabIndex = 0;
+secondOne.tabIndex = -1;
 secondOne.style.borderRight = '.02em solid white'
 secondOne.innerHTML = 0;
 timeSection.appendChild(secondOne);
